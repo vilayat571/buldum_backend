@@ -5,8 +5,9 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isAtive: {
+  isActive: {
     type: Boolean,
+    required: true,
     default: false,
   },
   city: {
@@ -32,8 +33,13 @@ const ReportSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   phone: {
+    type: String,
+    required: true,
+  },
+  code: {
     type: String,
     required: true,
   },

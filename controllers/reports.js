@@ -2,13 +2,38 @@ const ReportSchema = require("../models/reports.js");
 
 const addReport = async (req, res) => {
   try {
-    const newReport = await ReportSchema.create(req.body);
+    const {
+      categories,
+      isActive,
+      city,
+      area,
+      description,
+      fullName,
+      status,
+      email,
+      phone,
+    } = req.body;
+    const idCode = String(Math.random()).slice(2,7);
+    const newReport = await ReportSchema.create({
+      categories,
+      isActive,
+      city,
+      area,
+      description,
+      fullName,
+      status,
+      email,
+      phone,
+      code: idCode,
+    });
+
     const reports = await ReportSchema.find();
 
     return res.status(201).json({
       status: "OK",
       message: "Elan baxış üçün anbara əlavə edildi!",
       count: reports.length,
+      code: newReport.code,
       report: newReport,
     });
   } catch (error) {
@@ -28,6 +53,33 @@ const allReports = async (req, res) => {
       count: reports.length,
       reports,
     });
+  } catch (error) {
+    return res.status(404).json({
+      status: "FAILED",
+      message: error.message,
+    });
+  }
+};
+
+const findReport = async (req, res) => {
+  try {
+    const { code } = await req.body;
+    const idCode = await ReportSchema.findOne({ code });
+
+    if (idCode) {
+      return res.status(200).json({
+        status: "OK",
+        message: "Kodunuza uyğun elan!",
+        report: idCode,
+      });
+    } else {
+      return res.status(200).json({
+        status: "Failed",
+        message: "Belə bir elan yoxdur!",
+        count: reports.length,
+        reports,
+      });
+    }
   } catch (error) {
     return res.status(404).json({
       status: "FAILED",
@@ -68,4 +120,5 @@ module.exports = {
   addReport,
   allReports,
   deleteReport,
+  findReport
 };
