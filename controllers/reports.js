@@ -13,7 +13,7 @@ const addReport = async (req, res) => {
       email,
       phone,
     } = req.body;
-    const idCode = String(Math.random()).slice(2,7);
+    const idCode = String(Math.random()).slice(2, 7);
     const newReport = await ReportSchema.create({
       categories,
       isActive,
@@ -46,12 +46,35 @@ const addReport = async (req, res) => {
 
 const allReports = async (req, res) => {
   try {
-    const reports = await ReportSchema.find();
-    return res.status(201).json({
+    const { status, categories, city } = req.query;
+    const name = req.query.name?.toLowerCase();
+    const limitValue = req.query.limit;
+    const skipValue = req.query.skip;
+
+    const filter = {};
+    if (status) filter.status = status;
+    if (categories) filter.categories = categories;
+    if (city) filter.city = city;
+
+    let reports;
+    if (name?.length > 0) {
+      reports = await ReportSchema.find({
+        description: { $regex: name, $options: "i" },
+ 
+      })
+        .limit(limitValue)
+        .skip(skipValue);
+    } else {
+      reports = await ReportSchema.find(filter)
+        .limit(limitValue)
+        .skip(skipValue);
+    }
+
+    return res.status(200).json({
       status: "OK",
-      message: "Bütün elanlar!",
+      message: "Bütün elanlar",
       count: reports.length,
-      reports,
+      reports: reports,
     });
   } catch (error) {
     return res.status(404).json({
@@ -120,5 +143,5 @@ module.exports = {
   addReport,
   allReports,
   deleteReport,
-  findReport
+  findReport,
 };
