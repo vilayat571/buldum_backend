@@ -34,6 +34,10 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  comment: {
+    type: String,
+    required: false,
+  },
   code: {
     type: String,
     required: true,

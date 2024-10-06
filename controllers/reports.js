@@ -46,29 +46,17 @@ const addReport = async (req, res) => {
 
 const allReports = async (req, res) => {
   try {
-    const { status, categories, city } = req.query;
-    const name = req.query.name?.toLowerCase();
+    const { status, categories } = req.query;
     const limitValue = req.query.limit;
     const skipValue = req.query.skip;
 
     const filter = {};
     if (status) filter.status = status;
     if (categories) filter.categories = categories;
-    if (city) filter.city = city;
 
-    let reports;
-    if (name?.length > 0) {
-      reports = await ReportSchema.find({
-        description: { $regex: name, $options: "i" },
- 
-      })
-        .limit(limitValue)
-        .skip(skipValue);
-    } else {
-      reports = await ReportSchema.find(filter)
-        .limit(limitValue)
-        .skip(skipValue);
-    }
+    let reports = await ReportSchema.find(filter)
+      .limit(limitValue)
+      .skip(skipValue);
 
     return res.status(200).json({
       status: "OK",
