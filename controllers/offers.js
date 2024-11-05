@@ -1,5 +1,8 @@
 const OfferModel = require("../models/offers");
 
+// get, delete, post 
+
+
 const addArOffer = async (req, res) => {
   try {
     const { text } = await req.body;

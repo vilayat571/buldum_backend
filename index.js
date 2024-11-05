@@ -9,10 +9,12 @@ db();
 
 const Reports = require("./routes/report.js");
 const Offer = require("./routes/offer.js");
+const Users = require("./routes/user.js");
 app.use("/", Reports);
 app.use("/", Offer);
+app.use("/", Users);
 
-const PORT = 5000;
+const PORT = process.env.PORT  || 5000;
 app.listen(PORT, () => {
   console.log(`Backend started to listen on port ${PORT}`);
 });

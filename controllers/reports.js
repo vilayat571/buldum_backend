@@ -101,10 +101,12 @@ const findReport = async (req, res) => {
 
 const deleteReport = async (req, res) => {
   try {
-    const { id } = await req.params;
+    
+    const { id } = req.params; 
 
     if (id) {
       await ReportSchema.findByIdAndDelete(id);
+      const reports = await ReportSchema.find(); 
       return res.status(200).json({
         status: "OK",
         message: "Elan silinmişdir",
@@ -112,8 +114,9 @@ const deleteReport = async (req, res) => {
         reports,
       });
     } else {
-      return res.status(200).json({
-        status: "Failed",
+      const reports = await ReportSchema.find(); 
+      return res.status(401).json({
+        status: "FAILED",
         message: "Belə bir elan yoxdur!",
         count: reports.length,
         reports,
@@ -126,6 +129,7 @@ const deleteReport = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   addReport,

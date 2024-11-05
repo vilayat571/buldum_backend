@@ -1,11 +1,12 @@
-const mongoose = require("mongoose");
 
-const url =
-  "mongodb+srv://vilayat:9P4rGkZsnWBE5j7I@buldumcluster.eorxd9h.mongodb.net/?retryWrites=true&w=majority&appName=buldumcluster";
+const mongoose = require("mongoose");
+require('dotenv').config(); // Load environment variables
+
+const DB_URL = process.env.DB_URL;
 
 db = () => {
   mongoose
-    .connect(url)
+    .connect( DB_URL)
     .then(() => console.log("DB connected"))
     .catch((err) => console.log(err.message));
 };
